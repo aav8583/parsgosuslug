@@ -1,7 +1,10 @@
 package com.parsing.gosuslug.parsgosuslug.parsingsite;
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import com.parsing.gosuslug.parsgosuslug.controller.RecordController;
 import lombok.Data;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,41 +20,47 @@ import java.util.List;
 
 @Data
 @Component
-public class ParsingUrl implements ParsingSite{
+public class ParsingUrl implements ParsingSite {
 
     private Document doc;
     private Element element;
     private Elements elements;
     private String url;
     private List<String> urlList = new ArrayList<>();
+    private String link;
+    private int counter = 0;
+    RecordController rc = new RecordController();
 
-    public ParsingUrl() {
+
+    public ParsingUrl(){
     }
+
+//    @PostConstruct
+//    public void giveBean() {
+////        parsing();
+//    }
+
+
 
     @PostConstruct
-    public void giveBean() {
-        parsing();
-    }
-
     @Override
-    public List<String> parsing() {
+    public List<String> parsing(){
         try {
+            Configuration.browser = "chrome";
+            Configuration.headless = true;
             File file = new File("link.txt");
             FileReader fileReader = new FileReader(file);
             BufferedReader br = new BufferedReader(fileReader);
-            String link = br.readLine();
-//                doc = Jsoup.connect("http://zakupki.gov.ru/epz/order/extendedsearch/results.html?morphology=on&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&fz44=on&fz223=on&sortBy=UPDATE_DATE&af=on&publishDateFrom=+&currencyIdGeneral=-1&customerPlaceWithNested=on&customerPlace=5277335%2C5277327&customerPlaceCodes=77000000000%2C50000000000&delKladrIdsWithNested=on&contractStageList_0=on&contractStageList_1=on&contractStageList_2=on&contractStageList_3=on&contractStageList=0%2C1%2C2%2C3&contractPriceCurrencyId=-1").get();
-            doc = Jsoup.connect(link).get();
-            elements = doc.getElementsByAttributeValue("class", "registry-entry__header-top__number");
-            elements.forEach(elements -> {
-                element = elements.child(0);
-                url = element.attr("href");
-                urlList.add(url);
+            link = br.readLine();
+            Selenide.open(link);
+            ElementsCollection elCol = Selenide.$$x("//*[contains(text(),'Подача заявок')]/..//a");
+            elCol.forEach(selenideElement -> {
+                urlList.add(selenideElement.attr("href"));
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return  urlList;
+        return urlList;
     }
 
 }

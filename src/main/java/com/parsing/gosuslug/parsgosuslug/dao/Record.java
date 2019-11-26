@@ -2,11 +2,9 @@ package com.parsing.gosuslug.parsgosuslug.dao;
 
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 
 @Data
-@Component
 public class Record {
 
 
@@ -18,9 +16,6 @@ public class Record {
 
     public Record() {
     }
-
-
-
 
     public Record(String customer, String number, String data, String money,String url) {
         this.customer = customer;

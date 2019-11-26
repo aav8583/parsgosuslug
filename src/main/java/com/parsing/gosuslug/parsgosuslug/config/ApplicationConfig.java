@@ -1,7 +1,6 @@
 package com.parsing.gosuslug.parsgosuslug.config;
 
 import com.parsing.gosuslug.parsgosuslug.controller.ParsingSite;
-import com.parsing.gosuslug.parsgosuslug.parsingsite.ParsingUrl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,9 +12,16 @@ public class ApplicationConfig {
         return new ParsingSite();
     }
 
-    @Bean(name = "ParsingUrl")
-    public ParsingUrl getParsingUrl(){
-        return new ParsingUrl();
-    }
+//    @Bean(name = "ParsingUrl")
+//    public ParsingUrl getParsingUrl(){
+//        return new ParsingUrl();
+//    }
+
+//    @Bean(name= "RecordCotroller")
+//    public RecordController getRecordController(){
+//        return new RecordController();
+//    }
+
+
 
 }

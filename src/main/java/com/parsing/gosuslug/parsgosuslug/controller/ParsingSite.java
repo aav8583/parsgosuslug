@@ -7,17 +7,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 
-//selenium   selenid
 
 @Data
-@RestController
 public class ParsingSite {
 
 
@@ -48,7 +45,6 @@ public class ParsingSite {
     private List<String> dataList;
     private List<String> numberList;
 
-    private List<List> megaList;
 
 
     public ParsingSite() {

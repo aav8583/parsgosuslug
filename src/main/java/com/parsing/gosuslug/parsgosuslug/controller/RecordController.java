@@ -8,7 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -19,8 +19,17 @@ import java.util.List;
 
 @Data
 @RestController
+@RequestMapping
 public class RecordController {
 
+    private String link;
+
+
+    @PostMapping
+    public void postLink(@RequestBody String str){
+        link=str;
+        System.out.println(link);
+    }
 
     @Autowired
     @Qualifier("ParsingSite")
@@ -28,13 +37,11 @@ public class RecordController {
 
     List<Record> dataModels = new ArrayList<>();
 
-
     public RecordController() {
-
     }
 
     @PostConstruct
-    public void pohui() {
+    public void getBean() {
         parsingSite.methodTest();
         dataList = fillData();
         row1.createCell(0).setCellValue("Заказчик");
@@ -50,7 +57,7 @@ public class RecordController {
 
         try (FileOutputStream out = new FileOutputStream(new File("File1.xls"))) {
             workbook.write(out);
-            System.out.println("Done");
+            System.out.println("Все выполнено. Смотрите созданный файл");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,8 +72,6 @@ public class RecordController {
         Row row1 = sheet.createRow(rowNum);
 
         private List<Record> fillData () {
-            System.err.println("Fill Data");
-
             for (int i = 0; i < parsingSite.getConsumerList().size(); i++) {
 //                dataModels.add(new Record(consumerList.get(i), numberList1.get(i), dataList1.get(i), moneyList1.get(i), "http://zakupki.gov.ru" + urlList.get(i)));
                 dataModels.add(new Record(
@@ -74,9 +79,8 @@ public class RecordController {
                         parsingSite.getNumberList().get(i),
                         parsingSite.getDataList().get(i),
                         parsingSite.getMoneyList().get(i),
-                        "http://zakupki.gov.ru" + parsingSite.getUrlList().get(i)));
+                        parsingSite.getUrlList().get(i)));
             }
-
             return dataModels;
         }
 
